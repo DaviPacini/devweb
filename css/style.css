@@ -1,0 +1,9 @@
+.data-hora {
+    text-align: center;
+}
+
+#btn-dialog-fechar {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
