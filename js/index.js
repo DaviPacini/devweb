@@ -12,6 +12,12 @@ btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
 });
 
+const dialogData = document.getElementById("dialog-data")
+dialogData.textContent = "Data: " + getCurrentDate();
+
+const dialogHora = document.getElementById("dialog-hora")
+dialogHora.textContent = "Hora: " + getCurrentHour();
+
 diaSemana.textContent = getWeekDay();
 diaMesAno.textContent = getCurrentDate();
 
