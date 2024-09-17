@@ -7,3 +7,30 @@
     top: 0;
     right: 0;
 }
+
+/* Posicionamento do alerta no topo da página com position fixed */
+#alerta-registro-ponto {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ccc;
+}
+
+/* TO-DO: */
+/* Adicionar código CSS para alterar a opacidade */
+.hidden {
+    opacity: 0;
+}
+
+.show {
+    opacity: 1;
+}
+
+#btn-alerta-fechar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0px;
+    background-color: #ccc;
+}

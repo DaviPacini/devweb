@@ -1,3 +1,6 @@
+// TO-DO:
+// Organizar código-fonte,
+
 const diaSemana = document.getElementById("dia-semana");
 const diaMesAno = document.getElementById("dia-mes-ano");
 const horaMinSeg = document.getElementById("hora-min-seg");
@@ -12,17 +15,111 @@ btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
 });
 
-const dialogData = document.getElementById("dialog-data")
-dialogData.textContent = "Data: " + getCurrentDate();
+const btnAlertaFechar = document.getElementById("btn-alerta-fechar");
+btnAlertaFechar.addEventListener("click", () => {
+    divAlertaRegistroPonto.classList.remove("show");
+    divAlertaRegistroPonto.classList.add("hidden");
+});
 
-const dialogHora = document.getElementById("dialog-hora")
-dialogHora.textContent = "Hora: " + getCurrentHour();
+
+let registerLocalStorage = getRegisterLocalStorage();
+
+const dialogData = document.getElementById("dialog-data");
+const dialogHora = document.getElementById("dialog-hora");
+
+const divAlertaRegistroPonto = document.getElementById("alerta-registro-ponto");
+
+
 
 diaSemana.textContent = getWeekDay();
 diaMesAno.textContent = getCurrentDate();
 
 
+// TO-DO:
+// Por que esta função não retorna a localização?
+// [doc]
+function getCurrentPosition() {
+    navigator.geolocation.getCurrentPosition((position) => {
+        return position;
+    });
+}
+
+
+const btnDialogBaterPonto = document.getElementById("btn-dialog-bater-ponto");
+btnDialogBaterPonto.addEventListener("click", () => {
+
+    let typeRegister = document.getElementById("tipos-ponto").value;
+
+    let ponto = {
+        "data": getCurrentDate(),
+        "hora": getCurrentHour(),
+        "localizacao": getCurrentPosition(),
+        "id": 1,
+        "tipo": typeRegister
+    }
+
+    console.log(ponto);
+
+    saveRegisterLocalStorage(ponto);
+
+    localStorage.setItem("lastTypeRegister", typeRegister);
+    localStorage.setItem("lastDateRegister", ponto.data);
+    localStorage.setItem("lastTimeRegister", ponto.hora);
+
+    dialogPonto.close();
+
+    divAlertaRegistroPonto.classList.remove("hidden");
+    divAlertaRegistroPonto.classList.add("show");
+    setTimeout(() => {
+        divAlertaRegistroPonto.classList.remove("show");
+        divAlertaRegistroPonto.classList.add("hidden");
+      }, 5000);
+      
+
+    // Aguardar 3s e remover a classe show e adicionar a classe hidden
+
+
+    
+    // TO-DO:
+    // CRIAR UM ALERTA NO TOPO DA PÁGINA PRINCIPAL PARA CONFIRMAR O REGISTRO DE PONTO
+    // DEVE FICAR ABERTO POR 3 SEGUNDOS E DEVE TER UM EFEITO DE TRANSIÇÃO
+    // DEVE PODER SER FECHADO PELO USUÁRIO QUE NÃO QUISER AGUARDAR 3s
+    // DEVE MOSTRAR UMA MENSAGEM DE SUCESSO AO REGISTRAR O PONTO
+});
+
+
+function saveRegisterLocalStorage(register) {
+    registerLocalStorage.push(register); // Array
+    localStorage.setItem("register", JSON.stringify(registerLocalStorage));
+} 
+
+
+// Esta função deve retornar sempre um ARRAY, mesmo que seja vazio
+function getRegisterLocalStorage() {
+    let registers = localStorage.getItem("register");
+
+    if(!registers) {
+        return [];
+    }
+
+    return JSON.parse(registers); // converte de JSON para Array
+}
+
+
+
+
+
+// TO-DO:
+// alterar o nome da função
 function register() {
+    // TO-DO:
+    // Atualizar hora a cada segundo e data 00:00:00
+    dialogData.textContent = "Data: " + getCurrentDate();
+    dialogHora.textContent = "Hora: " + getCurrentHour();
+
+    let lastRegisterText = "Último registro: " + localStorage.getItem("lastDateRegister") + " - " + localStorage.getItem("lastTimeRegister") + " | " + localStorage.getItem("lastTypeRegister")
+    document.getElementById("dialog-last-register").textContent = lastRegisterText;
+
     dialogPonto.showModal();
 }
 
@@ -33,16 +130,13 @@ function getWeekDay() {
 }
 
 function getCurrentHour() {
-    // Considerar os métodos abaixo para incluir zeros em numeros < 10
-    // padStart()
-    // slice()
-    // formatos de hora considerando o locale do usuário
     const date = new Date();
-    return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    return String(date.getHours()).padStart(2, '0') + ":" + String(date.getMinutes()).padStart(2, '0') + ":" + String(date.getSeconds()).padStart(2, '0');
 }
 
 
 function getCurrentDate() {
+    // TO-DO:
     // Alterar a solução para considerar padStart ou slice
     // Considerar formatos diferentes da data, conforme localização
     // do usuário dd/mm/aaaa, mm/dd/aaaa, aaaa/mm/dd, aaaa.mm.dd
@@ -65,4 +159,5 @@ function printCurrentHour() {
 }
 
 
+printCurrentHour();
 setInterval(printCurrentHour, 1000);
