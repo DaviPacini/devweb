@@ -14,17 +14,42 @@
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #ccc;
+    background-color: aquamarine;
+    /* TO-DO: */
+    /* posicionar fora da página */
+    /* pode usar o translate no eixo Y */
+    /* usar um efeito de transição */
+}
+
+#alerta-registro-ponto p {
+    text-align: center;
+    background-color: aquamarine;
+    font-size: 1.5rem;
+    font-style: italic;
 }
 
 /* TO-DO: */
 /* Adicionar código CSS para alterar a opacidade */
 .hidden {
+    /* TO-DO: */
+    /* enviar para fora da página */
     opacity: 0;
 }
 
 .show {
+    /* TO-DO: */
+    /* trazer para dentro da página */
     opacity: 1;
+}
+
+
+#div-btn-bater-ponto {
+    text-align: center;
+}
+
+.data-hora p {
+    font-size: 2rem; /* tamanho relativo */
+    /* ??? */
 }
 
 #btn-alerta-fechar {
@@ -32,5 +57,5 @@
     top: 0;
     right: 0;
     border: 0px;
-    background-color: #ccc;
+    background-color: aquamarine;
 }
