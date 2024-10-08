@@ -5,23 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Controle de Ponto</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="alerta-registro-ponto" class="hidden">
         <p>Ponto registrado com sucesso</p>
-        <button id="btn-alerta-fechar">X</button>
+        <button id="alerta-registro-ponto-fechar">X</button>
     </div>
     <div class="data-hora">
-        <p id="dia-semana">Segunda-feira</p>
-        <p id="dia-mes-ano">26/08/2024</p>
-        <p id="hora-min-seg">08:01:35</p>
+        <p id="dia-semana"></p>
+        <p id="dia-mes-ano"></p>
+        <p id="hora-min-seg"></p>
     </div>
     <div id="div-btn-bater-ponto">
         <button id="btn-bater-ponto">Bater ponto!</button>
     </div>
     <dialog id="dialog-ponto">
-        <!-- TO-DO: -->
-        <!-- Quais outras informações relevantes podemos mostrar para o usuário? -->
         <p id="dialog-data"></p>
         <p id="dialog-hora"></p>
         <select name="tipos-ponto" id="tipos-ponto">
@@ -36,7 +37,6 @@
     </dialog>
     <!-- TO-DO: -->
     <!-- criar histórico dos últimos n registros-->
-    <!-- criar footer para alerta -->
     <script src="js/index.js"></script>
 </body>
 </html>
