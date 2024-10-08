@@ -1,5 +1,5 @@
 // TO-DO:
-// Organizar código-fonte,
+// Organizar código-fonte
 
 const diaSemana = document.getElementById("dia-semana");
 const diaMesAno = document.getElementById("dia-mes-ano");
@@ -15,12 +15,12 @@ btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
 });
 
-const btnAlertaFechar = document.getElementById("btn-alerta-fechar");
-btnAlertaFechar.addEventListener("click", () => {
-    divAlertaRegistroPonto.classList.remove("show");
-    divAlertaRegistroPonto.classList.add("hidden");
-});
-
+const nextRegister = {
+    "entrada": "intervalo",
+    "intervalo": "volta-intervalo", 
+    "volta-intervalo": "saida", 
+    "saida": "entrada"
+}
 
 let registerLocalStorage = getRegisterLocalStorage();
 
@@ -29,40 +29,54 @@ const dialogHora = document.getElementById("dialog-hora");
 
 const divAlertaRegistroPonto = document.getElementById("alerta-registro-ponto");
 
-
-
 diaSemana.textContent = getWeekDay();
 diaMesAno.textContent = getCurrentDate();
 
 
-// TO-DO:
-// Por que esta função não retorna a localização?
-// [doc]
-function getCurrentPosition() {
-    navigator.geolocation.getCurrentPosition((position) => {
-        return position;
+async function getCurrentPosition() {
+    return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            let userLocation = {
+                "latitude": position.coords.latitude,
+                "longitude": position.coords.longitude
+            }
+            resolve(userLocation);
+        },
+        (error) => {
+            reject("Erro ao recuperar a localização " + error);
+        });
     });
 }
 
+// TO-DO:
+// Problema: os 5 segundos continuam contando
+const btnCloseAlertRegister = document.getElementById("alerta-registro-ponto-fechar");
+btnCloseAlertRegister.addEventListener("click", () => {
+    divAlertaRegistroPonto.classList.remove("show");
+    divAlertaRegistroPonto.classList.add("hidden");
+});
 
 const btnDialogBaterPonto = document.getElementById("btn-dialog-bater-ponto");
-btnDialogBaterPonto.addEventListener("click", () => {
+btnDialogBaterPonto.addEventListener("click", async () => {
+    const typeRegister = document.getElementById("tipos-ponto");
+    let lastTypeRegister = localStorage.getItem("lastTypeRegister");
 
-    let typeRegister = document.getElementById("tipos-ponto").value;
+    console.log(lastTypeRegister);
+
+    let userCurrentPosition = await getCurrentPosition();
 
     let ponto = {
         "data": getCurrentDate(),
         "hora": getCurrentHour(),
-        "localizacao": getCurrentPosition(),
+        "localizacao": userCurrentPosition,
         "id": 1,
-        "tipo": typeRegister
+        "tipo": typeRegister.value
     }
 
     console.log(ponto);
 
     saveRegisterLocalStorage(ponto);
 
-    localStorage.setItem("lastTypeRegister", typeRegister);
     localStorage.setItem("lastDateRegister", ponto.data);
     localStorage.setItem("lastTimeRegister", ponto.hora);
 
@@ -70,31 +84,21 @@ btnDialogBaterPonto.addEventListener("click", () => {
 
     divAlertaRegistroPonto.classList.remove("hidden");
     divAlertaRegistroPonto.classList.add("show");
+
     setTimeout(() => {
         divAlertaRegistroPonto.classList.remove("show");
         divAlertaRegistroPonto.classList.add("hidden");
-      }, 5000);
-      
+    }, 5000);
 
-    // Aguardar 3s e remover a classe show e adicionar a classe hidden
-
-
-    
-    // TO-DO:
-    // CRIAR UM ALERTA NO TOPO DA PÁGINA PRINCIPAL PARA CONFIRMAR O REGISTRO DE PONTO
-    // DEVE FICAR ABERTO POR 3 SEGUNDOS E DEVE TER UM EFEITO DE TRANSIÇÃO
-    // DEVE PODER SER FECHADO PELO USUÁRIO QUE NÃO QUISER AGUARDAR 3s
-    // DEVE MOSTRAR UMA MENSAGEM DE SUCESSO AO REGISTRAR O PONTO
 });
 
-
 function saveRegisterLocalStorage(register) {
+    const typeRegister = document.getElementById("tipos-ponto");
     registerLocalStorage.push(register); // Array
     localStorage.setItem("register", JSON.stringify(registerLocalStorage));
+    localStorage.setItem("lastTypeRegister", typeRegister.value);
 } 
 
-
-// Esta função deve retornar sempre um ARRAY, mesmo que seja vazio
 function getRegisterLocalStorage() {
     let registers = localStorage.getItem("register");
 
@@ -102,23 +106,28 @@ function getRegisterLocalStorage() {
         return [];
     }
 
-    return JSON.parse(registers); // converte de JSON para Array
+    return JSON.parse(registers); 
 }
-
-
-
-
 
 // TO-DO:
 // alterar o nome da função
 function register() {
-    // TO-DO:
-    // Atualizar hora a cada segundo e data 00:00:00
     dialogData.textContent = "Data: " + getCurrentDate();
     dialogHora.textContent = "Hora: " + getCurrentHour();
+    
+    let lastTypeRegister = localStorage.getItem("lastTypeRegister");
+    if(lastTypeRegister) {
+        const typeRegister   = document.getElementById("tipos-ponto");
+        typeRegister.value   = nextRegister[lastTypeRegister];
+        let lastRegisterText = "Último registro: " + localStorage.getItem("lastDateRegister") + " - " + localStorage.getItem("lastTimeRegister") + " | " + localStorage.getItem("lastTypeRegister")
+        document.getElementById("dialog-last-register").textContent = lastRegisterText;
+    }
 
-    let lastRegisterText = "Último registro: " + localStorage.getItem("lastDateRegister") + " - " + localStorage.getItem("lastTimeRegister") + " | " + localStorage.getItem("lastTypeRegister")
-    document.getElementById("dialog-last-register").textContent = lastRegisterText;
+    // TO-DO
+    // Como "matar" o intervalo a cada vez que o dialog é fechado?
+    setInterval(() => {
+        dialogHora.textContent = "Hora: " + getCurrentHour();
+    }, 1000);
 
     dialogPonto.showModal();
 }
@@ -134,30 +143,14 @@ function getCurrentHour() {
     return String(date.getHours()).padStart(2, '0') + ":" + String(date.getMinutes()).padStart(2, '0') + ":" + String(date.getSeconds()).padStart(2, '0');
 }
 
-
 function getCurrentDate() {
-    // TO-DO:
-    // Alterar a solução para considerar padStart ou slice
-    // Considerar formatos diferentes da data, conforme localização
-    // do usuário dd/mm/aaaa, mm/dd/aaaa, aaaa/mm/dd, aaaa.mm.dd
-    // Verificar se no Date() há algum método que possa auxiliar
-    // locale
     const date = new Date();
-    let month = date.getMonth();
-    let day = date.getDate();
-    if (day < 10) {
-        day = "0" + day
-    }
-    if (month < 10) {
-        month = "0" + (month + 1)
-    }
-    return day + "/" + month + "/" + date.getFullYear();
+    return String(date.getDate()).padStart(2, '0') + "/" + String((date.getMonth() + 1)).padStart(2, '0') + "/" + String(date.getFullYear()).padStart(2, '0');
 }
 
 function printCurrentHour() {
     horaMinSeg.textContent = getCurrentHour();
 }
-
 
 printCurrentHour();
 setInterval(printCurrentHour, 1000);
