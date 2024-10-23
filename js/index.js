@@ -6,10 +6,15 @@ const btnBaterPonto = document.getElementById("btn-bater-ponto");
 btnBaterPonto.addEventListener("click", register);
 
 const dialogPonto = document.getElementById("dialog-ponto");
+const dialogJustificativa = document.getElementById("dialog-justificativa"); // Dialog de justificativa
 const btnDialogFechar = document.getElementById("btn-dialog-fechar");
 btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
 });
+
+const btnJustificar = document.getElementById("btn-justificar");
+const btnDialogJustificativaFechar = document.getElementById("btn-dialog-justificativa-fechar");
+const formJustificativa = document.getElementById("form-justificativa");
 
 const nextRegister = {
     "entrada": "intervalo",
@@ -34,7 +39,6 @@ const horaPonto = document.getElementById("hora-ponto");
 diaSemana.textContent = getWeekDay();
 diaMesAno.textContent = getCurrentDate();
 
-// Define a data máxima do input date como a data atual
 const today = new Date().toISOString().split('T')[0];
 dataPonto.max = today;
 
@@ -46,20 +50,36 @@ usarDataPassada.addEventListener("change", () => {
     }
 });
 
-async function getCurrentPosition() {
-    return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition((position) => {
-            let userLocation = {
-                "latitude": position.coords.latitude,
-                "longitude": position.coords.longitude
-            }
-            resolve(userLocation);
-        },
-        (error) => {
-            reject("Erro ao recuperar a localização: " + error);
-        });
-    });
-}
+btnJustificar.addEventListener("click", () => {
+    dialogJustificativa.showModal(); // Abrir o diálogo de justificativa de ausência
+});
+
+btnDialogJustificativaFechar.addEventListener("click", () => {
+    dialogJustificativa.close(); // Fechar o diálogo de justificativa
+});
+
+formJustificativa.addEventListener("submit", (e) => {
+    e.preventDefault();
+    
+    const descricao = document.getElementById("descricao-justificativa").value;
+    const arquivo = document.getElementById("arquivo-justificativa").files[0];
+    
+    const justificativa = {
+        "descricao": descricao,
+        "arquivo": arquivo ? arquivo.name : null // Salvamos apenas o nome do arquivo
+    };
+    
+    console.log("Justificativa salva:", justificativa);
+
+    // Salvar no localStorage para simular o armazenamento
+    let justificativas = JSON.parse(localStorage.getItem("justificativas")) || [];
+    justificativas.push(justificativa);
+    localStorage.setItem("justificativas", JSON.stringify(justificativas));
+    
+    alert("Justificativa enviada com sucesso!");
+    formJustificativa.reset(); // Limpa o formulário
+    dialogJustificativa.close(); // Fecha o diálogo
+});
 
 const btnCloseAlertRegister = document.getElementById("alerta-registro-ponto-fechar");
 btnCloseAlertRegister.addEventListener("click", () => {
@@ -87,7 +107,7 @@ btnDialogBaterPonto.addEventListener("click", async () => {
     }
 
     saveRegisterLocalStorage(ponto);
-    console.log(registerLocalStorage); // Adicionado para verificar se o ponto foi salvo
+    console.log(registerLocalStorage);
     divAlertaRegistroPonto.classList.remove("hidden");
     divAlertaRegistroPonto.classList.add("show");
 
@@ -100,14 +120,14 @@ btnDialogBaterPonto.addEventListener("click", async () => {
 });
 
 function saveRegisterLocalStorage(ponto) {
-    registerLocalStorage = getRegisterLocalStorage(); // Atualiza o registro com o que já existe
-    registerLocalStorage.push(ponto); // Adiciona o novo registro
-    localStorage.setItem("pontos", JSON.stringify(registerLocalStorage)); // Salva no localStorage
+    registerLocalStorage = getRegisterLocalStorage();
+    registerLocalStorage.push(ponto);
+    localStorage.setItem("pontos", JSON.stringify(registerLocalStorage));
 }
 
 function getRegisterLocalStorage() {
     let points = localStorage.getItem("pontos");
-    return points ? JSON.parse(points) : []; // Retorna os pontos armazenados ou um array vazio
+    return points ? JSON.parse(points) : [];
 }
 
 function getCurrentDate() {
