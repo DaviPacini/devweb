@@ -10,18 +10,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <header>
+        <nav class="navbar">
+            <ul class="navbar-menu">
+                <li><button id="btn-bater-ponto">Bater ponto!</button></li>
+                <!-- Espaço para adicionar novos botões no futuro -->
+                <li><button id="btn-novo1">Justificar</button></li>
+                <li><button id="btn-novo2">Relatorios</button></li>
+            </ul>
+        </nav>
+    </header>
+
     <div id="alerta-registro-ponto" class="hidden">
         <p>Ponto registrado com sucesso</p>
         <button id="alerta-registro-ponto-fechar">X</button>
     </div>
+
     <div class="data-hora">
         <p id="dia-semana"></p>
         <p id="dia-mes-ano"></p>
         <p id="hora-min-seg"></p>
     </div>
-    <div id="div-btn-bater-ponto">
-        <button id="btn-bater-ponto">Bater ponto!</button>
-    </div>
+
     <dialog id="dialog-ponto">
         <p id="dialog-data"></p>
         <p id="dialog-hora"></p>
@@ -35,8 +45,7 @@
         <p id="dialog-last-register"></p>
         <button id="btn-dialog-fechar">X</button>
     </dialog>
-    <!-- TO-DO: -->
-    <!-- criar histórico dos últimos n registros-->
+
     <script src="js/index.js"></script>
 </body>
 </html>

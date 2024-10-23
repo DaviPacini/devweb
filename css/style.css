@@ -1,41 +1,58 @@
-.data-hora {
-    text-align: center;
-    font-family: "Nanum Gothic Coding", monospace;
-    font-weight: 400;
-    font-style: normal;
-}
-
-#btn-dialog-fechar {
-    position: absolute;
-    top: 0;
-    right: 0;
-}
-
-#alerta-registro-ponto {
+/* Navbar */
+.navbar {
+    background-color: #2c3e50;
+    overflow: hidden;
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: green;
-    padding: 20px;
-}
-
-#alerta-registro-ponto p {
-    text-align: center;
-    color: white;
-    font-size: 1.1rem;
-    text-align: center;
-    font-family: "Nanum Gothic Coding", monospace;
-    font-weight: 400;
-    font-style: normal;
-}
-
-
-#alerta-registro-ponto-fechar {
-    position: absolute;
     top: 0;
-    right: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
+.navbar-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-menu li {
+    margin: 0 15px;
+}
+
+.navbar-menu a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 25px;
+    transition: background-color 0.3s ease;
+}
+
+.navbar-menu a:hover {
+    background-color: #34495e;
+}
+
+/* Estilo para o botão ativo/destacado */
+.navbar-menu .active {
+    background-color: #1abc9c;
+    color: white;
+}
+
+/* Estilo para os botões */
+.navbar-menu a.active:hover {
+    background-color: #16a085;
+}
+
+/* Ajuste do corpo */
+body {
+    padding-top: 60px; /* Para que o conteúdo não fique sob a navbar */
+    background-color: #34495e;
+    font-family: 'Nanum Gothic Coding', monospace;
+}
+
+/* Estilos para os demais componentes */
 .hidden {
     opacity: 0;
 }
@@ -44,34 +61,31 @@
     opacity: 1;
 }
 
-
-#div-btn-bater-ponto {
+.data-hora {
     text-align: center;
-}
-
-#btn-bater-ponto {
-    padding: 20px;
-    background-color: blue;
+    font-size: 2rem;
     color: white;
-    font-size: 1.3rem;
-    border: 0px;
+    margin-top: 50px;
 }
 
-.data-hora p {
-    font-size: 2rem; 
+#alerta-registro-ponto {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: green;
+    padding: 20px;
+    color: white;
 }
 
-#dialog-ponto p {
-    font-size: 1.5rem;
+#dialog-ponto {
+    border: 1px solid #333;
+    padding: 20px;
+    background-color: white;
     text-align: center;
 }
 
-#dialog-ponto select {
-    padding: 20px;
-    font-size: 1.3rem;
-}
-
-#btn-dialog-bater-ponto {
-    padding: 20px;
-    font-size: 1.3rem;
+#btn-dialog-fechar {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
