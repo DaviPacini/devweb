@@ -49,10 +49,12 @@ body {
 /* Estilos para componentes escondidos */
 .hidden {
     opacity: 0;
+    display: none; /* Adicionando display none para esconder completamente */
 }
 
 .show {
     opacity: 1;
+    display: block; /* Para mostrar o componente */
 }
 
 /* Estilo para exibição de data e hora */

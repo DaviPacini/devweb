@@ -34,6 +34,18 @@
     <dialog id="dialog-ponto">
         <p id="dialog-data"></p>
         <p id="dialog-hora"></p>
+        
+        <label>
+            <input type="checkbox" id="usar-data-passada"> Usar data passada
+        </label>
+        
+        <div id="data-hora-passa" class="hidden">
+            <label for="data-ponto">Selecione a data:</label>
+            <input type="date" id="data-ponto" max="">
+            <label for="hora-ponto">Selecione a hora:</label>
+            <input type="time" id="hora-ponto">
+        </div>
+        
         <select name="tipos-ponto" id="tipos-ponto">
             <option value="entrada">Entrada</option>
             <option value="intervalo">Intervalo</option>

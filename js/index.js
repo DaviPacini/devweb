@@ -1,6 +1,3 @@
-// TO-DO:
-// Organizar código-fonte
-
 const diaSemana = document.getElementById("dia-semana");
 const diaMesAno = document.getElementById("dia-mes-ano");
 const horaMinSeg = document.getElementById("hora-min-seg");
@@ -9,7 +6,6 @@ const btnBaterPonto = document.getElementById("btn-bater-ponto");
 btnBaterPonto.addEventListener("click", register);
 
 const dialogPonto = document.getElementById("dialog-ponto");
-
 const btnDialogFechar = document.getElementById("btn-dialog-fechar");
 btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
@@ -29,9 +25,26 @@ const dialogHora = document.getElementById("dialog-hora");
 
 const divAlertaRegistroPonto = document.getElementById("alerta-registro-ponto");
 
+// Elementos da data e hora passadas
+const usarDataPassada = document.getElementById("usar-data-passada");
+const dataHoraPassada = document.getElementById("data-hora-passa");
+const dataPonto = document.getElementById("data-ponto");
+const horaPonto = document.getElementById("hora-ponto");
+
 diaSemana.textContent = getWeekDay();
 diaMesAno.textContent = getCurrentDate();
 
+// Define a data máxima do input date como a data atual
+const today = new Date().toISOString().split('T')[0];
+dataPonto.max = today;
+
+usarDataPassada.addEventListener("change", () => {
+    if (usarDataPassada.checked) {
+        dataHoraPassada.classList.remove("hidden");
+    } else {
+        dataHoraPassada.classList.add("hidden");
+    }
+});
 
 async function getCurrentPosition() {
     return new Promise((resolve, reject) => {
@@ -43,13 +56,11 @@ async function getCurrentPosition() {
             resolve(userLocation);
         },
         (error) => {
-            reject("Erro ao recuperar a localização " + error);
+            reject("Erro ao recuperar a localização: " + error);
         });
     });
 }
 
-// TO-DO:
-// Problema: os 5 segundos continuam contando
 const btnCloseAlertRegister = document.getElementById("alerta-registro-ponto-fechar");
 btnCloseAlertRegister.addEventListener("click", () => {
     divAlertaRegistroPonto.classList.remove("show");
@@ -58,30 +69,25 @@ btnCloseAlertRegister.addEventListener("click", () => {
 
 const btnDialogBaterPonto = document.getElementById("btn-dialog-bater-ponto");
 btnDialogBaterPonto.addEventListener("click", async () => {
-    const typeRegister = document.getElementById("tipos-ponto");
-    let lastTypeRegister = localStorage.getItem("lastTypeRegister");
-
-    console.log(lastTypeRegister);
-
-    let userCurrentPosition = await getCurrentPosition();
-
-    let ponto = {
-        "data": getCurrentDate(),
-        "hora": getCurrentHour(),
-        "localizacao": userCurrentPosition,
-        "id": 1,
-        "tipo": typeRegister.value
+    let ponto;
+    if (usarDataPassada.checked) {
+        ponto = {
+            "data": dataPonto.value,
+            "hora": horaPonto.value,
+            "localizacao": await getCurrentPosition(),
+            "tipo": document.getElementById("tipos-ponto").value
+        };
+    } else {
+        ponto = {
+            "data": getCurrentDate(),
+            "hora": getCurrentHour(),
+            "localizacao": await getCurrentPosition(),
+            "tipo": document.getElementById("tipos-ponto").value
+        };
     }
 
-    console.log(ponto);
-
     saveRegisterLocalStorage(ponto);
-
-    localStorage.setItem("lastDateRegister", ponto.data);
-    localStorage.setItem("lastTimeRegister", ponto.hora);
-
-    dialogPonto.close();
-
+    console.log(registerLocalStorage); // Adicionado para verificar se o ponto foi salvo
     divAlertaRegistroPonto.classList.remove("hidden");
     divAlertaRegistroPonto.classList.add("show");
 
@@ -90,67 +96,42 @@ btnDialogBaterPonto.addEventListener("click", async () => {
         divAlertaRegistroPonto.classList.add("hidden");
     }, 5000);
 
+    dialogPonto.close();
 });
 
-function saveRegisterLocalStorage(register) {
-    const typeRegister = document.getElementById("tipos-ponto");
-    registerLocalStorage.push(register); // Array
-    localStorage.setItem("register", JSON.stringify(registerLocalStorage));
-    localStorage.setItem("lastTypeRegister", typeRegister.value);
-} 
+function saveRegisterLocalStorage(ponto) {
+    registerLocalStorage = getRegisterLocalStorage(); // Atualiza o registro com o que já existe
+    registerLocalStorage.push(ponto); // Adiciona o novo registro
+    localStorage.setItem("pontos", JSON.stringify(registerLocalStorage)); // Salva no localStorage
+}
 
 function getRegisterLocalStorage() {
-    let registers = localStorage.getItem("register");
-
-    if(!registers) {
-        return [];
-    }
-
-    return JSON.parse(registers); 
-}
-
-// TO-DO:
-// alterar o nome da função
-function register() {
-    dialogData.textContent = "Data: " + getCurrentDate();
-    dialogHora.textContent = "Hora: " + getCurrentHour();
-    
-    let lastTypeRegister = localStorage.getItem("lastTypeRegister");
-    if(lastTypeRegister) {
-        const typeRegister   = document.getElementById("tipos-ponto");
-        typeRegister.value   = nextRegister[lastTypeRegister];
-        let lastRegisterText = "Último registro: " + localStorage.getItem("lastDateRegister") + " - " + localStorage.getItem("lastTimeRegister") + " | " + localStorage.getItem("lastTypeRegister")
-        document.getElementById("dialog-last-register").textContent = lastRegisterText;
-    }
-
-    // TO-DO
-    // Como "matar" o intervalo a cada vez que o dialog é fechado?
-    setInterval(() => {
-        dialogHora.textContent = "Hora: " + getCurrentHour();
-    }, 1000);
-
-    dialogPonto.showModal();
-}
-
-function getWeekDay() {
-    const date = new Date();
-    let days = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
-    return days[date.getDay()];
-}
-
-function getCurrentHour() {
-    const date = new Date();
-    return String(date.getHours()).padStart(2, '0') + ":" + String(date.getMinutes()).padStart(2, '0') + ":" + String(date.getSeconds()).padStart(2, '0');
+    let points = localStorage.getItem("pontos");
+    return points ? JSON.parse(points) : []; // Retorna os pontos armazenados ou um array vazio
 }
 
 function getCurrentDate() {
-    const date = new Date();
-    return String(date.getDate()).padStart(2, '0') + "/" + String((date.getMonth() + 1)).padStart(2, '0') + "/" + String(date.getFullYear()).padStart(2, '0');
+    return new Date().toISOString().split('T')[0];
 }
 
-function printCurrentHour() {
-    horaMinSeg.textContent = getCurrentHour();
+function getCurrentHour() {
+    return new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 }
 
-printCurrentHour();
-setInterval(printCurrentHour, 1000);
+function getWeekDay() {
+    return new Date().toLocaleString('pt-BR', { weekday: 'long' });
+}
+
+function getCurrentTime() {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+
+setInterval(() => {
+    diaSemana.textContent = getWeekDay();
+    diaMesAno.textContent = getCurrentDate();
+    horaMinSeg.textContent = getCurrentTime();
+}, 1000);
+
+function register() {
+    dialogPonto.showModal();
+}
