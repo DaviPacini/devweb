@@ -15,7 +15,7 @@
             <ul class="navbar-menu">
                 <li><button id="btn-bater-ponto" class="navbar-btn">Bater ponto!</button></li>
                 <li><button id="btn-justificar" class="navbar-btn">Justificar</button></li>
-                <li><button id="btn-relatorios" class="navbar-btn">Relatórios</button></li>
+                <li><button href="html/relatorio.html" id="btn-relatorios" class="navbar-btn">Relatórios</button></li>
             </ul>
         </nav>
     </header>
@@ -34,28 +34,30 @@
     <dialog id="dialog-ponto">
         <p id="dialog-data"></p>
         <p id="dialog-hora"></p>
-        
-        <label>
-            <input type="checkbox" id="usar-data-passada"> Usar data passada
-        </label>
-        
-        <div id="data-hora-passa" class="hidden">
-            <label for="data-ponto">Selecione a data:</label>
-            <input type="date" id="data-ponto" max="">
-            <label for="hora-ponto">Selecione a hora:</label>
-            <input type="time" id="hora-ponto">
-        </div>
-        
         <select name="tipos-ponto" id="tipos-ponto">
             <option value="entrada">Entrada</option>
             <option value="intervalo">Intervalo</option>
             <option value="volta-intervalo">Volta Intervalo</option>
             <option value="saida">Saída</option>
         </select>
+        
+        <label>
+            <input type="checkbox" id="usar-data-passada"> Usar Data Passada
+        </label>
+        <input type="date" id="data-ponto" class="hidden" max="" />
+        
+        <label>
+            <input type="checkbox" id="usar-observacao"> Incluir Observação
+        </label>
+        <div id="observacao-container" class="hidden">
+            <textarea id="observacao" maxlength="100" placeholder="Escreva sua observação (máx. 100 caracteres)"></textarea>
+        </div>
+    
         <button id="btn-dialog-bater-ponto">Registrar ponto</button>
         <p id="dialog-last-register"></p>
         <button id="btn-dialog-fechar">X</button>
     </dialog>
+    
 
     <script src="js/index.js"></script>
 </body>

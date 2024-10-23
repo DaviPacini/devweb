@@ -11,6 +11,12 @@ btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
 });
 
+// link para pagina relatorios
+document.getElementById("btn-relatorios").onclick = function() {
+    window.location.href = "html/relatorio.html";
+};
+
+
 const nextRegister = {
     "entrada": "intervalo",
     "intervalo": "volta-intervalo", 
@@ -22,29 +28,36 @@ let registerLocalStorage = getRegisterLocalStorage();
 
 const dialogData = document.getElementById("dialog-data");
 const dialogHora = document.getElementById("dialog-hora");
+const usarDataPassada = document.getElementById("usar-data-passada");
+const dataPonto = document.getElementById("data-ponto");
+const usarObservacao = document.getElementById("usar-observacao");
+const observacaoContainer = document.getElementById("observacao-container");
+const observacao = document.getElementById("observacao");
 
 const divAlertaRegistroPonto = document.getElementById("alerta-registro-ponto");
 
-// Elementos da data e hora passadas
-const usarDataPassada = document.getElementById("usar-data-passada");
-const dataHoraPassada = document.getElementById("data-hora-passa");
-const dataPonto = document.getElementById("data-ponto");
-const horaPonto = document.getElementById("hora-ponto");
-
-diaSemana.textContent = getWeekDay();
-diaMesAno.textContent = getCurrentDate();
-
-// Define a data máxima do input date como a data atual
-const today = new Date().toISOString().split('T')[0];
-dataPonto.max = today;
 
 usarDataPassada.addEventListener("change", () => {
     if (usarDataPassada.checked) {
-        dataHoraPassada.classList.remove("hidden");
+        dataPonto.classList.remove("hidden");
+        const today = new Date().toISOString().split('T')[0];
+        dataPonto.max = today; 
     } else {
-        dataHoraPassada.classList.add("hidden");
+        dataPonto.classList.add("hidden");
+        dataPonto.value = ""; 
     }
 });
+
+usarObservacao.addEventListener("change", () => {
+    if (usarObservacao.checked) {
+        observacaoContainer.classList.remove("hidden");
+    } else {
+        observacaoContainer.classList.add("hidden");
+    }
+});
+
+diaSemana.textContent = getWeekDay();
+diaMesAno.textContent = getCurrentDate();
 
 async function getCurrentPosition() {
     return new Promise((resolve, reject) => {
@@ -69,25 +82,17 @@ btnCloseAlertRegister.addEventListener("click", () => {
 
 const btnDialogBaterPonto = document.getElementById("btn-dialog-bater-ponto");
 btnDialogBaterPonto.addEventListener("click", async () => {
-    let ponto;
-    if (usarDataPassada.checked) {
-        ponto = {
-            "data": dataPonto.value,
-            "hora": horaPonto.value,
-            "localizacao": await getCurrentPosition(),
-            "tipo": document.getElementById("tipos-ponto").value
-        };
-    } else {
-        ponto = {
-            "data": getCurrentDate(),
-            "hora": getCurrentHour(),
-            "localizacao": await getCurrentPosition(),
-            "tipo": document.getElementById("tipos-ponto").value
-        };
-    }
+    const typeRegister = document.getElementById("tipos-ponto");
+    let ponto = {
+        "data": usarDataPassada.checked ? dataPonto.value : getCurrentDate(),
+        "hora": getCurrentHour(),
+        "localizacao": await getCurrentPosition(),
+        "tipo": typeRegister.value,
+        "observacao": usarObservacao.checked ? observacao.value : "" 
+    };
 
     saveRegisterLocalStorage(ponto);
-    console.log(registerLocalStorage); // Adicionado para verificar se o ponto foi salvo
+    console.log(registerLocalStorage); 
     divAlertaRegistroPonto.classList.remove("hidden");
     divAlertaRegistroPonto.classList.add("show");
 
@@ -100,14 +105,14 @@ btnDialogBaterPonto.addEventListener("click", async () => {
 });
 
 function saveRegisterLocalStorage(ponto) {
-    registerLocalStorage = getRegisterLocalStorage(); // Atualiza o registro com o que já existe
-    registerLocalStorage.push(ponto); // Adiciona o novo registro
-    localStorage.setItem("pontos", JSON.stringify(registerLocalStorage)); // Salva no localStorage
+    registerLocalStorage = getRegisterLocalStorage(); 
+    registerLocalStorage.push(ponto); 
+    localStorage.setItem("pontos", JSON.stringify(registerLocalStorage)); 
 }
 
 function getRegisterLocalStorage() {
     let points = localStorage.getItem("pontos");
-    return points ? JSON.parse(points) : []; // Retorna os pontos armazenados ou um array vazio
+    return points ? JSON.parse(points) : []; 
 }
 
 function getCurrentDate() {
@@ -133,5 +138,7 @@ setInterval(() => {
 }, 1000);
 
 function register() {
+    dialogData.textContent = "Data: " + getCurrentDate();
+    dialogHora.textContent = "Hora: " + getCurrentHour();
     dialogPonto.showModal();
 }
