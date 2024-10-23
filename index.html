@@ -57,6 +57,20 @@
         <button id="btn-dialog-fechar">X</button>
     </dialog>
 
+    <dialog id="dialog-justificativa">
+        <h3>Justificar Ausência</h3>
+        <form id="form-justificativa">
+            <label for="descricao-justificativa">Descreva o motivo da ausência:</label>
+            <textarea id="descricao-justificativa" rows="4" placeholder="Escreva sua justificativa"></textarea>
+
+            <label for="arquivo-justificativa">Anexar arquivo (opcional):</label>
+            <input type="file" id="arquivo-justificativa" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+
+            <button type="submit">Enviar justificativa</button>
+            <button type="button" id="btn-dialog-justificativa-fechar">Cancelar</button>
+        </form>
+    </dialog>
+
     <script src="js/index.js"></script>
 </body>
 </html>
