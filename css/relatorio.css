@@ -19,3 +19,11 @@ body{
     padding: 0;
     text-align: center;
 }
+
+#id-filtro-periodo{
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    color: white;
+    margin: 0;
+    padding: 0;
+}

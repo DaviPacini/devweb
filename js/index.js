@@ -94,6 +94,7 @@ btnDialogBaterPonto.addEventListener("click", async () => {
 
 function saveRegisterLocalStorage(register) {
     const typeRegister = document.getElementById("tipos-ponto");
+    register.id = new Date().getTime();
     registerLocalStorage.push(register); // Array
     localStorage.setItem("register", JSON.stringify(registerLocalStorage));
     localStorage.setItem("lastTypeRegister", typeRegister.value);
@@ -154,11 +155,6 @@ function printCurrentHour() {
 
 printCurrentHour();
 setInterval(printCurrentHour, 1000);
-
-/*setTimeout(() => {
-    localStorage.clear(); // Limpa o localStorage após 5 minutos (300000 ms)
-    alert('Registros limpos após 5 minutos!');
-}, 604800000); // 5 minutos em milissegundos*/
 
 window.onload = function() {
     localStorage.clear(); // Limpa o localStorage ao carregar a página
