@@ -1,3 +1,4 @@
+// Elementos de controle
 const diaSemana = document.getElementById("dia-semana");
 const diaMesAno = document.getElementById("dia-mes-ano");
 const horaMinSeg = document.getElementById("hora-min-seg");
@@ -6,16 +7,20 @@ const btnBaterPonto = document.getElementById("btn-bater-ponto");
 btnBaterPonto.addEventListener("click", register);
 
 const dialogPonto = document.getElementById("dialog-ponto");
+const dialogJustificativa = document.getElementById("dialog-justificativa"); // Dialogo de justificativa
 const btnDialogFechar = document.getElementById("btn-dialog-fechar");
 btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
 });
 
+const btnJustificar = document.getElementById("btn-justificar");
+const btnDialogJustificativaFechar = document.getElementById("btn-dialog-justificativa-fechar");
+const formJustificativa = document.getElementById("form-justificativa");
+
 // link para pagina relatorios
 document.getElementById("btn-relatorios").onclick = function() {
     window.location.href = "html/relatorio.html";
 };
-
 
 const nextRegister = {
     "entrada": "intervalo",
@@ -35,7 +40,6 @@ const observacaoContainer = document.getElementById("observacao-container");
 const observacao = document.getElementById("observacao");
 
 const divAlertaRegistroPonto = document.getElementById("alerta-registro-ponto");
-
 
 usarDataPassada.addEventListener("change", () => {
     if (usarDataPassada.checked) {
@@ -102,6 +106,31 @@ btnDialogBaterPonto.addEventListener("click", async () => {
     }, 5000);
 
     dialogPonto.close();
+});
+
+btnJustificar.addEventListener("click", () => {
+    dialogJustificativa.showModal(); // Abrir diálogo de justificativa de ausência
+});
+
+btnDialogJustificativaFechar.addEventListener("click", () => {
+    dialogJustificativa.close(); // Fechar o diálogo de justificativa
+});
+
+formJustificativa.addEventListener("submit", (e) => {
+    e.preventDefault();
+    
+    const descricao = document.getElementById("descricao-justificativa").value;
+    const arquivo = document.getElementById("arquivo-justificativa").files[0];
+    
+    const justificativa = {
+        "descricao": descricao,
+        "arquivo": arquivo ? arquivo.name : null // Armazenando apenas o nome do arquivo
+    };
+    
+    console.log("Justificativa enviada:", justificativa);
+    
+    // Aqui você pode salvar no localStorage ou enviar para um servidor, conforme a necessidade
+    dialogJustificativa.close(); // Fechar o diálogo após envio
 });
 
 function saveRegisterLocalStorage(ponto) {
