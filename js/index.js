@@ -154,3 +154,14 @@ function printCurrentHour() {
 
 printCurrentHour();
 setInterval(printCurrentHour, 1000);
+
+/*setTimeout(() => {
+    localStorage.clear(); // Limpa o localStorage após 5 minutos (300000 ms)
+    alert('Registros limpos após 5 minutos!');
+}, 604800000); // 5 minutos em milissegundos*/
+
+window.onload = function() {
+    localStorage.clear(); // Limpa o localStorage ao carregar a página
+};
+
+

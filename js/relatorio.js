@@ -1,28 +1,18 @@
-//console.log(JSON.parse(localStorage.getItem("register")));
-
-
 function renderList() {
-    registers = JSON.parse(localStorage.getItem("register"));
+    const registros = JSON.parse(localStorage.getItem("register")) || [];
+    const registrosContainer = document.getElementById('registros-relatorio');
 
-    registers.forEach(register => {
-        console.log(register);
+    if (registros.length === 0) {
+        registrosContainer.innerHTML = '<p>Nenhum registro encontrado.</p>';
+        return;
+    }
 
-        // Padrão de apresentação
-        // > 08/10/2024
-        // Entrada | 08:00:35 | Obs | Anexo | Editar | Excluir
-
-        // [!]
-        // iterar a lista de registros e criar as entradas
-
-        // [?]
+    registros.forEach(register => {
         const divRegistro = document.createElement("div");
-        
-        // [?]
-        divRegistro.innerHTML = `<p>${register.date}</p>`;    
-
-        //[?]
+        divRegistro.innerHTML = `<p>${register.data} - ${register.hora} | ${register.tipo} | 
+            Lat: ${register.localizacao.latitude}, Lon: ${register.localizacao.longitude}</p>`;
+        registrosContainer.appendChild(divRegistro);
     });
-
 }
 
 renderList();
