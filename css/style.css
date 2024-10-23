@@ -89,3 +89,42 @@ body {
     top: 0;
     right: 0;
 }
+
+/* Dialog para justificativa de ausência */
+#dialog-justificativa {
+    border: 1px solid #333;
+    padding: 20px;
+    background-color: white;
+    text-align: center;
+}
+
+#dialog-justificativa h3 {
+    margin-bottom: 20px;
+}
+
+#form-justificativa {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#form-justificativa label {
+    font-size: 1rem;
+}
+
+#form-justificativa textarea {
+    width: 100%;
+    resize: none;
+}
+
+#form-justificativa input[type="file"] {
+    margin: 10px 0;
+}
+
+#btn-dialog-justificativa-fechar {
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
