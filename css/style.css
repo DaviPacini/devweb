@@ -21,38 +21,32 @@
     margin: 0 15px;
 }
 
-.navbar-menu a {
+/* Botões da navbar com bordas arredondadas */
+.navbar-btn {
+    background-color: #1abc9c; /* Cor de fundo inicial */
     color: white;
-    text-decoration: none;
     padding: 10px 20px;
     font-size: 1.2rem;
-    border-radius: 25px;
-    transition: background-color 0.3s ease;
+    border: none;
+    border-radius: 25px; /* Arredondamento dos botões */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
 }
 
-.navbar-menu a:hover {
-    background-color: #34495e;
-}
-
-/* Estilo para o botão ativo/destacado */
-.navbar-menu .active {
-    background-color: #1abc9c;
-    color: white;
-}
-
-/* Estilo para os botões */
-.navbar-menu a.active:hover {
-    background-color: #16a085;
+/* Efeito de hover nos botões da navbar */
+.navbar-btn:hover {
+    background-color: #16a085; /* Cor ao passar o mouse */
+    transform: scale(1.05); /* Pequeno aumento ao passar o mouse */
 }
 
 /* Ajuste do corpo */
 body {
-    padding-top: 60px; /* Para que o conteúdo não fique sob a navbar */
+    padding-top: 60px; /* Espaçamento para evitar que o conteúdo fique sob a navbar */
     background-color: #34495e;
     font-family: 'Nanum Gothic Coding', monospace;
 }
 
-/* Estilos para os demais componentes */
+/* Estilos para componentes escondidos */
 .hidden {
     opacity: 0;
 }
@@ -61,6 +55,7 @@ body {
     opacity: 1;
 }
 
+/* Estilo para exibição de data e hora */
 .data-hora {
     text-align: center;
     font-size: 2rem;
@@ -68,6 +63,7 @@ body {
     margin-top: 50px;
 }
 
+/* Estilo para o alerta de registro de ponto */
 #alerta-registro-ponto {
     position: fixed;
     bottom: 20px;
@@ -77,6 +73,7 @@ body {
     color: white;
 }
 
+/* Estilo para o diálogo de ponto */
 #dialog-ponto {
     border: 1px solid #333;
     padding: 20px;
@@ -84,6 +81,7 @@ body {
     text-align: center;
 }
 
+/* Botão de fechar o diálogo */
 #btn-dialog-fechar {
     position: absolute;
     top: 0;
