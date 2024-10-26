@@ -1,14 +1,62 @@
-.data-hora {
-    text-align: center;
-    font-family: "Nanum Gothic Coding", monospace;
-    font-weight: 400;
-    font-style: normal;
+.navbar {
+    background-color: #2c3e50;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
-#btn-dialog-fechar {
-    position: absolute;
-    top: 0;
-    right: 0;
+.navbar-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-menu li {
+    margin: 0 15px;
+}
+
+.navbar-btn {
+    background-color: #1abc9c; 
+    color: white;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 25px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.navbar-btn:hover {
+    background-color: #16a085; 
+    transform: scale(1.05); 
+} /* Aqui estava faltando o fechamento do bloco */
+
+body {
+    padding-top: 60px; 
+    background-color: #34495e;
+    font-family: 'Nanum Gothic Coding', monospace;
+}
+
+.hidden {
+    opacity: 0;
+    display: none; 
+}
+
+.show {
+    opacity: 1;
+    display: block; 
+}
+
+.data-hora {
+    text-align: center;
+    font-size: 2rem;
+    color: white;
+    margin-top: 50px;
 }
 
 #alerta-registro-ponto {
@@ -17,61 +65,66 @@
     right: 20px;
     background-color: green;
     padding: 20px;
-}
-
-#alerta-registro-ponto p {
-    text-align: center;
     color: white;
-    font-size: 1.1rem;
-    text-align: center;
-    font-family: "Nanum Gothic Coding", monospace;
-    font-weight: 400;
-    font-style: normal;
 }
 
+#dialog-ponto {
+    border: 1px solid #333;
+    padding: 20px;
+    background-color: white;
+    text-align: center;
+}
 
-#alerta-registro-ponto-fechar {
+#btn-dialog-fechar {
     position: absolute;
     top: 0;
     right: 0;
 }
 
-.hidden {
-    opacity: 0;
+#observacao-container {
+    margin-top: 10px;
 }
 
-.show {
-    opacity: 1;
+#observacao {
+    width: 100%;
+    height: 60px;
+    resize: none;
 }
 
-
-#div-btn-bater-ponto {
+#dialog-justificativa {
+    border: 1px solid #333;
+    padding: 20px;
+    background-color: white;
     text-align: center;
 }
 
-#btn-bater-ponto {
-    padding: 20px;
-    background-color: blue;
+#dialog-justificativa h3 {
+    margin-bottom: 20px;
+}
+
+#form-justificativa {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#form-justificativa label {
+    font-size: 1rem;
+}
+
+#form-justificativa textarea {
+    width: 100%;
+    resize: none;
+}
+
+#form-justificativa input[type="file"] {
+    margin: 10px 0;
+}
+
+#btn-dialog-justificativa-fechar {
+    background-color: red;
     color: white;
-    font-size: 1.3rem;
-    border: 0px;
-}
-
-.data-hora p {
-    font-size: 2rem; 
-}
-
-#dialog-ponto p {
-    font-size: 1.5rem;
-    text-align: center;
-}
-
-#dialog-ponto select {
-    padding: 20px;
-    font-size: 1.3rem;
-}
-
-#btn-dialog-bater-ponto {
-    padding: 20px;
-    font-size: 1.3rem;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
 }

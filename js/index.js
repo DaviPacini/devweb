@@ -1,5 +1,3 @@
-// TO-DO:
-// Organizar código-fonte
 
 const diaSemana = document.getElementById("dia-semana");
 const diaMesAno = document.getElementById("dia-mes-ano");
@@ -9,11 +7,19 @@ const btnBaterPonto = document.getElementById("btn-bater-ponto");
 btnBaterPonto.addEventListener("click", register);
 
 const dialogPonto = document.getElementById("dialog-ponto");
-
+const dialogJustificativa = document.getElementById("dialog-justificativa");
 const btnDialogFechar = document.getElementById("btn-dialog-fechar");
 btnDialogFechar.addEventListener("click", () => {
     dialogPonto.close();
 });
+
+const btnJustificar = document.getElementById("btn-justificar");
+const btnDialogJustificativaFechar = document.getElementById("btn-dialog-justificativa-fechar");
+const formJustificativa = document.getElementById("form-justificativa");
+
+document.getElementById("btn-relatorios").onclick = function() {
+    window.location.href = "html/relatorio.html";
+};
 
 const nextRegister = {
     "entrada": "intervalo",
@@ -26,8 +32,32 @@ let registerLocalStorage = getRegisterLocalStorage();
 
 const dialogData = document.getElementById("dialog-data");
 const dialogHora = document.getElementById("dialog-hora");
+const usarDataPassada = document.getElementById("usar-data-passada");
+const dataPonto = document.getElementById("data-ponto");
+const usarObservacao = document.getElementById("usar-observacao");
+const observacaoContainer = document.getElementById("observacao-container");
+const observacao = document.getElementById("observacao");
 
 const divAlertaRegistroPonto = document.getElementById("alerta-registro-ponto");
+
+usarDataPassada.addEventListener("change", () => {
+    if (usarDataPassada.checked) {
+        dataPonto.classList.remove("hidden");
+        const today = new Date().toISOString().split('T')[0];
+        dataPonto.max = today; 
+    } else {
+        dataPonto.classList.add("hidden");
+        dataPonto.value = ""; 
+    }
+});
+
+usarObservacao.addEventListener("change", () => {
+    if (usarObservacao.checked) {
+        observacaoContainer.classList.remove("hidden");
+    } else {
+        observacaoContainer.classList.add("hidden");
+    }
+});
 
 diaSemana.textContent = getWeekDay();
 diaMesAno.textContent = getCurrentDate();
@@ -48,8 +78,7 @@ async function getCurrentPosition() {
     });
 }
 
-// TO-DO:
-// Problema: os 5 segundos continuam contando
+
 const btnCloseAlertRegister = document.getElementById("alerta-registro-ponto-fechar");
 btnCloseAlertRegister.addEventListener("click", () => {
     divAlertaRegistroPonto.classList.remove("show");
@@ -60,22 +89,20 @@ const btnDialogBaterPonto = document.getElementById("btn-dialog-bater-ponto");
 btnDialogBaterPonto.addEventListener("click", async () => {
     const typeRegister = document.getElementById("tipos-ponto");
     let lastTypeRegister = localStorage.getItem("lastTypeRegister");
-
-    console.log(lastTypeRegister);
-
-    let userCurrentPosition = await getCurrentPosition();
-
     let ponto = {
-        "data": getCurrentDate(),
-        "hora": getCurrentHour(),
-        "localizacao": userCurrentPosition,
-        "id": 1,
-        "tipo": typeRegister.value
-    }
-
+            "data": getCurrentDate(),
+            "hora": getCurrentHour(),
+            "localizacao": await getCurrentPosition(),
+            "id": 1,
+            "tipo": typeRegister.value
+        }
+    console.log(lastTypeRegister);
     console.log(ponto);
 
     saveRegisterLocalStorage(ponto);
+    console.log(registerLocalStorage); 
+    divAlertaRegistroPonto.classList.remove("hidden");
+    divAlertaRegistroPonto.classList.add("show");
 
     localStorage.setItem("lastDateRegister", ponto.data);
     localStorage.setItem("lastTimeRegister", ponto.hora);
@@ -90,6 +117,31 @@ btnDialogBaterPonto.addEventListener("click", async () => {
         divAlertaRegistroPonto.classList.add("hidden");
     }, 5000);
 
+});
+
+btnJustificar.addEventListener("click", () => {
+    dialogJustificativa.showModal(); // Abrir diálogo de justificativa de ausência
+});
+
+btnDialogJustificativaFechar.addEventListener("click", () => {
+    dialogJustificativa.close(); // Fechar o diálogo de justificativa
+});
+
+formJustificativa.addEventListener("submit", (e) => {
+    e.preventDefault();
+    
+    const descricao = document.getElementById("descricao-justificativa").value;
+    const arquivo = document.getElementById("arquivo-justificativa").files[0];
+    
+    const justificativa = {
+        "descricao": descricao,
+        "arquivo": arquivo ? arquivo.name : null // Armazenando apenas o nome do arquivo
+    };
+    
+    console.log("Justificativa enviada:", justificativa);
+    
+    // Aqui você pode salvar no localStorage ou enviar para um servidor, conforme a necessidade
+    dialogJustificativa.close(); // Fechar o diálogo após envio
 });
 
 function saveRegisterLocalStorage(register) {
@@ -127,26 +179,24 @@ function register() {
     // TO-DO
     // Como "matar" o intervalo a cada vez que o dialog é fechado?
     setInterval(() => {
-        dialogHora.textContent = "Hora: " + getCurrentHour();
+        diaSemana.textContent = getWeekDay();
+        diaMesAno.textContent = getCurrentDate();
+        horaMinSeg.textContent = getCurrentTime();
     }, 1000);
 
     dialogPonto.showModal();
 }
 
 function getWeekDay() {
-    const date = new Date();
-    let days = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
-    return days[date.getDay()];
+    return new Date().toLocaleString('pt-BR', { weekday: 'long' });
 }
 
 function getCurrentHour() {
-    const date = new Date();
-    return String(date.getHours()).padStart(2, '0') + ":" + String(date.getMinutes()).padStart(2, '0') + ":" + String(date.getSeconds()).padStart(2, '0');
+    return new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 }
 
 function getCurrentDate() {
-    const date = new Date();
-    return String(date.getDate()).padStart(2, '0') + "/" + String((date.getMonth() + 1)).padStart(2, '0') + "/" + String(date.getFullYear()).padStart(2, '0');
+    return new Date().toISOString().split('T')[0];
 }
 
 function printCurrentHour() {
@@ -156,8 +206,14 @@ function printCurrentHour() {
 printCurrentHour();
 setInterval(printCurrentHour, 1000);
 
+function getCurrentTime() {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+
 window.onload = function() {
     localStorage.clear(); // Limpa o localStorage ao carregar a página
 };
+
+
 
 

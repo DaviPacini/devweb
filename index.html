@@ -10,18 +10,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <header>
+        <nav class="navbar">
+            <ul class="navbar-menu">
+                <li><button id="btn-bater-ponto" class="navbar-btn">Bater ponto!</button></li>
+                <li><button id="btn-justificar" class="navbar-btn">Justificar</button></li>
+                <li><button href="html/relatorio.html" id="btn-relatorios" class="navbar-btn">Relatórios</button></li>
+            </ul>
+        </nav>
+    </header>
+
     <div id="alerta-registro-ponto" class="hidden">
         <p>Ponto registrado com sucesso</p>
         <button id="alerta-registro-ponto-fechar">X</button>
     </div>
+
     <div class="data-hora">
         <p id="dia-semana"></p>
         <p id="dia-mes-ano"></p>
         <p id="hora-min-seg"></p>
     </div>
-    <div id="div-btn-bater-ponto">
-        <button id="btn-bater-ponto">Bater ponto!</button>
-    </div>
+
     <dialog id="dialog-ponto">
         <p id="dialog-data"></p>
         <p id="dialog-hora"></p>
@@ -31,10 +40,39 @@
             <option value="volta-intervalo">Volta Intervalo</option>
             <option value="saida">Saída</option>
         </select>
+        
+        <label>
+            <input type="checkbox" id="usar-data-passada"> Usar Data Passada
+        </label>
+        <input type="date" id="data-ponto" class="hidden" max="" />
+        
+        <label>
+            <input type="checkbox" id="usar-observacao"> Incluir Observação
+        </label>
+        <div id="observacao-container" class="hidden">
+            <textarea id="observacao" maxlength="100" placeholder="Escreva sua observação (máx. 100 caracteres)"></textarea>
+        </div>
+    
         <button id="btn-dialog-bater-ponto">Registrar ponto</button>
         <p id="dialog-last-register"></p>
         <button id="btn-dialog-fechar">X</button>
     </dialog>
+
+    <!-- Dialogo para justificativa de ausência -->
+    <dialog id="dialog-justificativa">
+        <h3>Justificar Ausência</h3>
+        <form id="form-justificativa">
+            <label for="descricao-justificativa">Descreva o motivo da ausência:</label>
+            <textarea id="descricao-justificativa" rows="4" placeholder="Escreva sua justificativa"></textarea>
+
+            <label for="arquivo-justificativa">Anexar arquivo (opcional):</label>
+            <input type="file" id="arquivo-justificativa" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+
+            <button type="submit">Enviar justificativa</button>
+            <button type="button" id="btn-dialog-justificativa-fechar">Cancelar</button>
+        </form>
+    </dialog>
+
     <script src="js/index.js"></script>
 </body>
 </html>
