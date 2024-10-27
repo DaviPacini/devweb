@@ -1,39 +1,39 @@
 function baterPonto() {
     const registros = JSON.parse(localStorage.getItem("register")) || [];
 
-    // Obter o estado das checkboxes
+    
     const dataAnteriorCheckbox = document.getElementById("checkboxDataAnterior").checked;
     const justificativaCheckbox = document.getElementById("checkboxJustificativa").checked;
 
-    // Criar novo registro com a data e hora atuais
+    
     const novoRegistro = {
         id: Date.now(),
-        data: new Date().toLocaleDateString("pt-BR"), // Data no formato DD/MM/YYYY
-        hora: new Date().toLocaleTimeString("pt-BR"), // Hora no formato HH:MM:SS
-        tipo: "Bateu ponto", // Exemplo de tipo
-        localizacao: { latitude: 0, longitude: 0 }, // Preencha conforme necessário
-        modificado: justificativaCheckbox, // Marcar como modificado se justificativa estiver marcada
-        dataPassada: dataAnteriorCheckbox // Marcar como data anterior se checkbox estiver marcada
+        data: new Date().toLocaleDateString("pt-BR"), 
+        hora: new Date().toLocaleTimeString("pt-BR"), 
+        tipo: "Bateu ponto", 
+        localizacao: { latitude: 0, longitude: 0 }, 
+        modificado: justificativaCheckbox, 
+        dataPassada: dataAnteriorCheckbox 
     };
 
-    // Salvar o novo registro no array
+    
     registros.push(novoRegistro);
     localStorage.setItem("register", JSON.stringify(registros));
 
-    renderList(); // Atualizar a lista com o novo registro
+    renderList(); 
 }
 
 function renderList() {
     const registros = JSON.parse(localStorage.getItem("register")) || [];
     const registrosContainer = document.getElementById('registros-relatorio');
-    registrosContainer.innerHTML = ''; // Limpa o container
+    registrosContainer.innerHTML = ''; 
 
     if (registros.length === 0) {
         registrosContainer.innerHTML = '<p>Nenhum registro encontrado.</p>';
         return;
     }
 
-    // Renderizando os registros
+    
     registros.forEach(register => {
         const divRegistro = document.createElement("div");
         divRegistro.innerHTML = `
@@ -44,16 +44,16 @@ function renderList() {
             <button onclick="alert('Esse registro não pode ser excluído!')">Excluir</button>
         `;
 
-        // Limpar classes anteriores antes de aplicar novas classes
-        divRegistro.className = "";  // Remove todas as classes
+        
+        divRegistro.className = "";  
 
-        // Definindo a cor com base nos valores de `dataPassada` e `modificado`
+        
         if (register.modificado) {
-            divRegistro.classList.add("text-red"); // Registro com justificativa (vermelho)
+            divRegistro.classList.add("text-red"); 
         } else if (register.dataPassada) {
-            divRegistro.classList.add("text-yellow"); // Registro com data anterior (amarelo)
+            divRegistro.classList.add("text-yellow"); 
         } else {
-            divRegistro.classList.add("text-white"); // Registro normal (branco)
+            divRegistro.classList.add("text-white"); 
         }
 
         registrosContainer.appendChild(divRegistro);
@@ -93,5 +93,5 @@ function editJustification(id) {
     }
 }
 
-// Inicializa a lista de registros
+
 renderList();

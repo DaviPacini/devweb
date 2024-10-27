@@ -122,11 +122,11 @@ btnDialogBaterPonto.addEventListener("click", async () => {
 });
 
 btnJustificar.addEventListener("click", () => {
-    dialogJustificativa.showModal(); // Abrir diálogo de justificativa de ausência
+    dialogJustificativa.showModal();  
 });
 
 btnDialogJustificativaFechar.addEventListener("click", () => {
-    dialogJustificativa.close(); // Fechar o diálogo de justificativa
+    dialogJustificativa.close(); 
 });
 
 formJustificativa.addEventListener("submit", (e) => {
@@ -137,19 +137,19 @@ formJustificativa.addEventListener("submit", (e) => {
     
     const justificativa = {
         "descricao": descricao,
-        "arquivo": arquivo ? arquivo.name : null // Armazenando apenas o nome do arquivo
+        "arquivo": arquivo ? arquivo.name : null 
     };
     
     console.log("Justificativa enviada:", justificativa);
     
-    // Aqui você pode salvar no localStorage ou enviar para um servidor, conforme a necessidade
-    dialogJustificativa.close(); // Fechar o diálogo após envio
+    
+    dialogJustificativa.close(); 
 });
 
 function saveRegisterLocalStorage(register) {
     const typeRegister = document.getElementById("tipos-ponto");
     register.id = new Date().getTime();
-    registerLocalStorage.push(register); // Array
+    registerLocalStorage.push(register); 
     localStorage.setItem("register", JSON.stringify(registerLocalStorage));
     localStorage.setItem("lastTypeRegister", typeRegister.value);
 } 
@@ -164,8 +164,7 @@ function getRegisterLocalStorage() {
     return JSON.parse(registers); 
 }
 
-// TO-DO:
-// alterar o nome da função
+
 function register() {
     dialogData.textContent = "Data: " + getCurrentDate();
     dialogHora.textContent = "Hora: " + getCurrentHour();
@@ -178,8 +177,7 @@ function register() {
         document.getElementById("dialog-last-register").textContent = lastRegisterText;
     }
 
-    // TO-DO
-    // Como "matar" o intervalo a cada vez que o dialog é fechado?
+
     setInterval(() => {
         diaSemana.textContent = getWeekDay();
         diaMesAno.textContent = getCurrentDate();
@@ -213,7 +211,7 @@ function getCurrentTime() {
 }
 
 window.onload = function() {
-    localStorage.clear(); // Limpa o localStorage ao carregar a página
+    localStorage.clear(); 
 };
 
 
