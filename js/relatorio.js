@@ -15,14 +15,14 @@ function baterPonto() {
         dataRegistro = new Date().toLocaleDateString("pt-BR"); 
     }
 
-    // Variável para o comentário
-    let comentario = "Nenhum comentário."; // Valor padrão
+    
+    let comentario = "Nenhum comentário."; 
 
-    // Solicita o comentário apenas se a checkbox estiver marcada
+    
     if (justificativaCheckbox) {
-        const userComment = prompt("Insira um comentário:"); // Pede ao usuário
+        const userComment = prompt("Insira um comentário:"); 
         if (userComment && userComment.trim() !== "") {
-            comentario = userComment; // Se houver um comentário, usa-o
+            comentario = userComment; 
         }
     }
 
@@ -34,7 +34,7 @@ function baterPonto() {
         localizacao: { latitude: 0, longitude: 0 }, 
         modificado: justificativaCheckbox, 
         dataPassada: dataAnteriorCheckbox, 
-        comentario: comentario // Armazena o comentário
+        comentario: comentario 
     };
 
     registros.push(novoRegistro);
@@ -62,20 +62,29 @@ function renderList() {
         } else {
             dataExibida = register.data;
         }
-
+        if (register.observacao == null){
+            divRegistro.innerHTML = `
+            <p>${dataExibida} - ${register.hora} | ${register.tipo} |
+            Lat: ${register.localizacao.latitude}, Lon: ${register.localizacao.longitude} </p> 
+            <button onclick="editRegister(${register.id})">Editar</button>
+            <button onclick="editJustification(${register.id})">Modificar Justificativa</button>
+            <button onclick="alert('Esse registro não pode ser excluído!')">Excluir</button>
+        `; 
+        } else {
         divRegistro.innerHTML = `
             <p>${dataExibida} - ${register.hora} | ${register.tipo} |
             Lat: ${register.localizacao.latitude}, Lon: ${register.localizacao.longitude} |
-            Comentário: ${register.comentario}</p> <!-- Aqui é onde exibimos o comentário -->
+            Comentário: ${register.observacao}</p> 
             <button onclick="editRegister(${register.id})">Editar</button>
             <button onclick="editJustification(${register.id})">Modificar Justificativa</button>
             <button onclick="alert('Esse registro não pode ser excluído!')">Excluir</button>
         `;
+        }
 
-        // Define a classe CSS com base no estado do registro
+        
         if (register.modificado) {
             divRegistro.classList.add("text-red"); 
-        } else if (register.dataPassada) {
+        } else if (register.data.includes("-")) {
             divRegistro.classList.add("text-yellow"); 
         } else {
             divRegistro.classList.add("text-white"); 
@@ -106,9 +115,9 @@ function editJustification(id) {
     const registroIndex = registros.findIndex(r => r.id === id);
 
     if (registroIndex !== -1) {
-        const newJustification = prompt("Modificar justificativa:", registros[registroIndex].justificativa || "");
+        const newJustification = prompt("Modificar justificativa:", registros[registroIndex].observacao || "");
         if (newJustification) {
-            registros[registroIndex].justificativa = newJustification;
+            registros[registroIndex].observacao = newJustification;
             registros[registroIndex].modificado = true; 
             localStorage.setItem("register", JSON.stringify(registros));
             renderList();
