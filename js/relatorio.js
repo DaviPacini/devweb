@@ -1,15 +1,12 @@
 function baterPonto() {
     const registros = JSON.parse(localStorage.getItem("register")) || [];
 
-    
     const dataAnteriorCheckbox = document.getElementById("usar-data-passada").checked; 
     const justificativaCheckbox = document.getElementById("usar-observacao").checked; 
 
-    
     let dataRegistro;
     if (dataAnteriorCheckbox) {
         dataRegistro = document.getElementById("data-ponto").value; 
-        
         if (!dataRegistro) {
             alert("Por favor, selecione uma data.");
             return; 
@@ -18,11 +15,17 @@ function baterPonto() {
         dataRegistro = new Date().toLocaleDateString("pt-BR"); 
     }
 
-    
-    const comentario = prompt("Insira um comentário:");
-    console.log("Comentário capturado:", comentario); 
+    // Variável para o comentário
+    let comentario = "Nenhum comentário."; // Valor padrão
 
-    
+    // Solicita o comentário apenas se a checkbox estiver marcada
+    if (justificativaCheckbox) {
+        const userComment = prompt("Insira um comentário:"); // Pede ao usuário
+        if (userComment && userComment.trim() !== "") {
+            comentario = userComment; // Se houver um comentário, usa-o
+        }
+    }
+
     const novoRegistro = {
         id: Date.now(),
         data: dataRegistro, 
@@ -31,14 +34,11 @@ function baterPonto() {
         localizacao: { latitude: 0, longitude: 0 }, 
         modificado: justificativaCheckbox, 
         dataPassada: dataAnteriorCheckbox, 
-        comentario: comentario || "Nenhum comentário." 
+        comentario: comentario // Armazena o comentário
     };
 
-    
     registros.push(novoRegistro);
     localStorage.setItem("register", JSON.stringify(registros));
-
-    
     renderList(); 
 }
 
@@ -47,33 +47,32 @@ function renderList() {
     const registrosContainer = document.getElementById('registros-relatorio');
     registrosContainer.innerHTML = ''; 
 
-    
     if (registros.length === 0) {
         registrosContainer.innerHTML = '<p>Nenhum registro encontrado.</p>';
         return;
     }
 
-    
     registros.forEach(register => {
         const divRegistro = document.createElement("div");
-        
-        
-        const dataExibida = register.data; 
-        console.log("Data exibida:", dataExibida); 
+
+        let dataExibida;
+        if (register.data.includes("-")) { 
+            const [ano, mes, dia] = register.data.split("-");
+            dataExibida = `${dia}/${mes}/${ano}`;
+        } else {
+            dataExibida = register.data;
+        }
 
         divRegistro.innerHTML = `
             <p>${dataExibida} - ${register.hora} | ${register.tipo} |
             Lat: ${register.localizacao.latitude}, Lon: ${register.localizacao.longitude} |
-            Comentário: ${register.comentario}</p> <!-- Adicionando comentário -->
+            Comentário: ${register.comentario}</p> <!-- Aqui é onde exibimos o comentário -->
             <button onclick="editRegister(${register.id})">Editar</button>
             <button onclick="editJustification(${register.id})">Modificar Justificativa</button>
             <button onclick="alert('Esse registro não pode ser excluído!')">Excluir</button>
         `;
 
-        
-        divRegistro.className = "";  
-
-        
+        // Define a classe CSS com base no estado do registro
         if (register.modificado) {
             divRegistro.classList.add("text-red"); 
         } else if (register.dataPassada) {
@@ -85,7 +84,6 @@ function renderList() {
         registrosContainer.appendChild(divRegistro);
     });
 }
-
 
 function editRegister(id) {
     const registros = JSON.parse(localStorage.getItem("register")) || [];
@@ -119,6 +117,5 @@ function editJustification(id) {
         alert("Registro não encontrado!");
     }
 }
-
 
 renderList();

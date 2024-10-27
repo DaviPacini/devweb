@@ -1,9 +1,8 @@
-body{
+body {
     background-color: #2c3e50;
-    
 }
 
-#registros-relatorio{
+#registros-relatorio {
     font-family: 'Roboto', sans-serif;
     font-size: 20px;
     color: white;
@@ -11,7 +10,7 @@ body{
     padding: 0;
 }
 
-#main-h1{
+#main-h1 {
     font-family: 'Roboto', sans-serif;
     font-size: 24px;
     color: white;
@@ -20,7 +19,7 @@ body{
     text-align: center;
 }
 
-#id-filtro-periodo{
+#id-filtro-periodo {
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
     color: white;
@@ -40,3 +39,28 @@ body{
     color: white;
 }
 
+#legenda-retangulos {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.retangulo {
+    width: 20px;
+    height: 10px;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.legenda-red {
+    background-color: red;
+}
+
+.legenda-yellow {
+    background-color: yellow;
+}
+
+.legenda-white {
+    background-color: white;
+}
