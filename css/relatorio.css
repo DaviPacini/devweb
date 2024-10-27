@@ -27,3 +27,13 @@ body{
     margin: 0;
     padding: 0;
 }
+
+.text-white {
+    color: white;
+}
+.text-red {
+    color: red;
+}
+.text-yellow {
+    color: yellow;
+}

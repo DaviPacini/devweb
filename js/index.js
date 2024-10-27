@@ -96,6 +96,8 @@ btnDialogBaterPonto.addEventListener("click", async () => {
             "id": 1,
             "tipo": typeRegister.value
         }
+        
+        
     console.log(lastTypeRegister);
     console.log(ponto);
 
@@ -192,11 +194,11 @@ function getWeekDay() {
 }
 
 function getCurrentHour() {
-    return new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    return new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
 }
 
 function getCurrentDate() {
-    return new Date().toISOString().split('T')[0];
+    return new Date().toLocaleDateString('pt-BR');
 }
 
 function printCurrentHour() {
