@@ -1,4 +1,3 @@
-
 const diaSemana = document.getElementById("dia-semana");
 const diaMesAno = document.getElementById("dia-mes-ano");
 const horaMinSeg = document.getElementById("hora-min-seg");
@@ -62,7 +61,6 @@ usarObservacao.addEventListener("change", () => {
 diaSemana.textContent = getWeekDay();
 diaMesAno.textContent = getCurrentDate();
 
-
 async function getCurrentPosition() {
     return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -78,7 +76,6 @@ async function getCurrentPosition() {
     });
 }
 
-
 const btnCloseAlertRegister = document.getElementById("alerta-registro-ponto-fechar");
 btnCloseAlertRegister.addEventListener("click", () => {
     divAlertaRegistroPonto.classList.remove("show");
@@ -89,36 +86,28 @@ const btnDialogBaterPonto = document.getElementById("btn-dialog-bater-ponto");
 btnDialogBaterPonto.addEventListener("click", async () => {
     const typeRegister = document.getElementById("tipos-ponto");
     let lastTypeRegister = localStorage.getItem("lastTypeRegister");
+    
     let ponto = {
-            "data": getCurrentDate(),
-            "hora": getCurrentHour(),
-            "localizacao": await getCurrentPosition(),
-            "id": 1,
-            "tipo": typeRegister.value
-        }
-        
-        
-    console.log(lastTypeRegister);
-    console.log(ponto);
+        "data": usarDataPassada.checked ? dataPonto.value || getCurrentDate() : getCurrentDate(),
+        "hora": getCurrentHour(),
+        "localizacao": await getCurrentPosition(),
+        "id": Date.now(), // Utilizando Date.now() para um ID único
+        "tipo": typeRegister.value,
+        "observacao": usarObservacao.checked ? observacao.value : null // Observação se ativada
+    };
 
     saveRegisterLocalStorage(ponto);
-    console.log(registerLocalStorage); 
     divAlertaRegistroPonto.classList.remove("hidden");
     divAlertaRegistroPonto.classList.add("show");
 
     localStorage.setItem("lastDateRegister", ponto.data);
     localStorage.setItem("lastTimeRegister", ponto.hora);
-
     dialogPonto.close();
-
-    divAlertaRegistroPonto.classList.remove("hidden");
-    divAlertaRegistroPonto.classList.add("show");
 
     setTimeout(() => {
         divAlertaRegistroPonto.classList.remove("show");
         divAlertaRegistroPonto.classList.add("hidden");
     }, 5000);
-
 });
 
 btnJustificar.addEventListener("click", () => {
@@ -141,42 +130,34 @@ formJustificativa.addEventListener("submit", (e) => {
     };
     
     console.log("Justificativa enviada:", justificativa);
-    
-    
     dialogJustificativa.close(); 
 });
 
 function saveRegisterLocalStorage(register) {
-    const typeRegister = document.getElementById("tipos-ponto");
-    register.id = new Date().getTime();
     registerLocalStorage.push(register); 
     localStorage.setItem("register", JSON.stringify(registerLocalStorage));
-    localStorage.setItem("lastTypeRegister", typeRegister.value);
+    localStorage.setItem("lastTypeRegister", register.tipo);
 } 
 
 function getRegisterLocalStorage() {
     let registers = localStorage.getItem("register");
-
-    if(!registers) {
+    if (!registers) {
         return [];
     }
-
     return JSON.parse(registers); 
 }
-
 
 function register() {
     dialogData.textContent = "Data: " + getCurrentDate();
     dialogHora.textContent = "Hora: " + getCurrentHour();
     
     let lastTypeRegister = localStorage.getItem("lastTypeRegister");
-    if(lastTypeRegister) {
-        const typeRegister   = document.getElementById("tipos-ponto");
-        typeRegister.value   = nextRegister[lastTypeRegister];
+    if (lastTypeRegister) {
+        const typeRegister = document.getElementById("tipos-ponto");
+        typeRegister.value = nextRegister[lastTypeRegister];
         let lastRegisterText = "Último registro: " + localStorage.getItem("lastDateRegister") + " - " + localStorage.getItem("lastTimeRegister") + " | " + localStorage.getItem("lastTypeRegister")
         document.getElementById("dialog-last-register").textContent = lastRegisterText;
     }
-
 
     setInterval(() => {
         diaSemana.textContent = getWeekDay();
@@ -192,7 +173,7 @@ function getWeekDay() {
 }
 
 function getCurrentHour() {
-    return new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 
 function getCurrentDate() {
@@ -210,10 +191,4 @@ function getCurrentTime() {
     return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 
-window.onload = function() {
-    localStorage.clear(); 
-};
-
-
-
-
+// Remover a limpeza do localStorage na inicialização
