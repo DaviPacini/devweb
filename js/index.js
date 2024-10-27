@@ -91,9 +91,9 @@ btnDialogBaterPonto.addEventListener("click", async () => {
         "data": usarDataPassada.checked ? dataPonto.value || getCurrentDate() : getCurrentDate(),
         "hora": getCurrentHour(),
         "localizacao": await getCurrentPosition(),
-        "id": Date.now(), // Utilizando Date.now() para um ID único
+        "id": Date.now(),  
         "tipo": typeRegister.value,
-        "observacao": usarObservacao.checked ? observacao.value : null // Observação se ativada
+        "observacao": usarObservacao.checked ? observacao.value : null 
     };
 
     saveRegisterLocalStorage(ponto);
@@ -191,4 +191,4 @@ function getCurrentTime() {
     return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 
-// Remover a limpeza do localStorage na inicialização
+
