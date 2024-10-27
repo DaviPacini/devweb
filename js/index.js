@@ -165,6 +165,8 @@ function register() {
         horaMinSeg.textContent = getCurrentTime();
     }, 1000);
 
+    console.log("Bater p0nto");
+
     dialogPonto.showModal();
 }
 
