@@ -7,13 +7,23 @@
     <link rel="stylesheet" href="../css/relatorio.css">
 </head>
 <body>
-    <h1>Relatório de Registro de Pontos</h1>
+    <h1 id="main-h1">Relatório de Registro de Pontos</h1>
+    
+    <div id="id-filtro-periodo">
+        <label for="filtro-periodo">Filtrar por período:</label>
+        <select id="filtro-periodo">
+            <option value="todos">Todos</option>
+            <option value="ultima-semana">Última Semana</option>
+            <option value="ultimo-mes">Último Mês</option>
+        </select>
+        <div id="legenda-retangulos">
+            <div class="retangulo legenda-red"></div><span>Ponto Editado</span>
+            <div class="retangulo legenda-yellow"></div><span>Ponto com data anterior</span>
+            <div class="retangulo legenda-white"></div><span>Ponto comum</span>
+        </div>
+    </div>
 
-    <div id="registros-relatorio">
-        <!-- Criar uma lista dinâmica de pontos -->
-        <!-- baseada nos dados do localstorage -->
-        <!-- registros-relatorio -->
-    </div>    
+    <div id="registros-relatorio"></div>    
 
     <script src="../js/relatorio.js"></script>
 </body>
